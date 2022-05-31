@@ -29,11 +29,17 @@ class Pawn(Piece):
 
         #Déplacement normal
         deplacement_base = [position[0], position[1]+(direction*1)]
-        deplacements.append(deplacement_base)
+        if self.board.get_piece(deplacement_base) is None:
+            deplacements.append(deplacement_base)
 
         #Déplacement *2
-        if self.board.get_piece(deplacement_base) is None and not self.has_move:
-            deplacements.append([position[0], position[1]+(direction*2)])
+        deplacement_two = [position[0], position[1]+(direction*2)]
+        if (
+            self.board.get_piece(deplacement_base) is None and
+            self.board.get_piece(deplacement_two) is None and
+            not self.has_move
+        ):
+            deplacements.append(deplacement_two)
 
         #Prise
         for move in moves_attack:
