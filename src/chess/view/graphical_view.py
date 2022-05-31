@@ -47,7 +47,9 @@ class GraphicalView():
         if piece is None:
             return images["blank"]
 
-        return images[piece["type"] + ("W" if piece["isWhite"] else "B")]
+        return images[
+            type(piece).__name__.lower() + ("W" if piece.color == Colors.WHITE else "B")
+        ]
 
     def new_game(self):
         """Démarre une nouvelle partie
@@ -84,10 +86,10 @@ class GraphicalView():
     def set_move_from(self, coord):
         """Sélectionne la pièce à bouger
         """
-        piece = self.controller.get_piece(coord)
+        piece = self.controller.get_piece(list(coord))
         if piece is not None and piece.color == self.controller.line:
             self.move_from = coord
-            self.possibles_moves = self.controller.get_deplacements(self.move_from)
+            self.possibles_moves = self.controller.get_deplacements(list(self.move_from))
 
     def set_move_to(self, coord):
         """Sélectionne la destination de la piece
@@ -95,7 +97,10 @@ class GraphicalView():
         self.move_to = coord
 
         if self.move_from != self.move_to:
-            self.controller.move(self.move_from, self.move_to)
+            try:
+                self.controller.move(list(self.move_from), list(self.move_to))
+            except ValueError:
+                pass
 
         self.move_from = None
         self.move_to = None
@@ -116,9 +121,9 @@ class GraphicalView():
         """
         winner = self.controller.winner
 
-        self.window["move_list"].update(self.controller.move_list)
+        self.window["move_list"].update(self.controller.move_list())
 
-        if  winner is None:
+        if winner is None:
             for i in range(8):
                 for j in range(8):
                     piece_image = self.get_image(self.controller.get_piece([i, j]))
