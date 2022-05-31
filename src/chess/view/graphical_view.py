@@ -57,10 +57,13 @@ class GraphicalView():
 
         self.controller.new_game()
         self.disable_buttons(False)
+        self.move_from = None
+        self.possibles_moves = []
         line_str = "white" if Colors.WHITE == self.controller.line else "black"
         self.window["subtitle"].Update(
             f"Line : {line_str}"
         )
+        # self.draw_board()
 
     def open_pgn(self):
         """Ouvre un fichier gpn
