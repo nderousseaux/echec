@@ -3,7 +3,6 @@
 
 from chess.model.colors_enum import Colors
 from chess.model.board import Board
-from chess.model.pieces import King
 
 class Game():
     """Classe controlleur, appellée exclusivement par la vue
@@ -41,6 +40,9 @@ class Game():
         - Vérifie que la piece qui bouge correspond au trait
         - Appelle Board:Move, qui vérifiera toutes les conditions liées à la disposition du plateau
         """
+        if self.winner != None:
+            raise ValueError("La partie est finie")
+
         Board.coord_valid(move_to)
         Board.coord_valid(move_from)
 
@@ -55,13 +57,35 @@ class Game():
             raise ValueError("La couleur de la pièce n'est pas égale à la couleur du trait")
 
         self.board.move(move_to, move_from)
-        piece.has_move = True
 
-
-        if self.line == Colors.WHITE:
-            self.line=Colors.BLACK
+        #On teste si c'est echec et mat
+        if not self.checkmate():
+            if self.line == Colors.WHITE:
+                self.line=Colors.BLACK
+            else:
+                self.line=Colors.WHITE
         else:
-            self.line=Colors.WHITE
+            self.winner = self.line
+
+    def checkmate(self):
+        """Vérifie si le joueur adverse est en échec et mat
+        Si oui, il met à jour la variable winner
+        """
+        color_opponent = Colors.WHITE if self.line == Colors.BLACK else Colors.BLACK
+        king = self.board.get_king(color_opponent)
+
+        if king.is_chess():
+
+            deplacements_opponents = []
+            for opponent in self.board.get_pieces_color(color_opponent):
+                deplacements_opponents+=self.board.get_deplacements(
+                    self.board.get_position(opponent)
+                )
+
+            if len(deplacements_opponents) == 0:
+                return True
+
+        return False
 
     def get_deplacements(self, pos):
         """Renvoie la liste des déplacements possible pour
@@ -94,9 +118,9 @@ class Game():
         """Renvoie la position du roi en échec.
         Si le roi n'est pas en échec, renvoie None
         """
-        for key, value in self.board.pieces.items():
-            if isinstance(key, King) and key.color == self.line and key.is_chess():
-                return value
+        king = self.board.get_king(self.line)
+        if king.is_chess():
+            return self.board.get_position(king)
 
         return None
 

@@ -32,7 +32,7 @@ class Piece:
         for i in range(1, 8):
             try:
                 deplacement = [position[0]+(incr_x*i), position[1]+(incr_y*i)]
-                
+
                 #Si on sort du plateau, on arrête
                 board.Board.coord_valid(deplacement)
 

@@ -126,34 +126,33 @@ class GraphicalView():
 
         self.window["move_list"].update(self.controller.move_list())
 
-        if winner is None:
-            for i in range(8):
-                for j in range(8):
-                    piece_image = self.get_image(self.controller.get_piece([i, j]))
-                    #Ma pièce
-                    if (i,j) == self.move_from:
-                        color = 'green'
+        for i in range(8):
+            for j in range(8):
+                piece_image = self.get_image(self.controller.get_piece([i, j]))
+                #Ma pièce
+                if (i,j) == self.move_from:
+                    color = 'green'
 
-                    #Coups possible
-                    elif [i,j] in self.possibles_moves:
-                        color = POSSIBLE_DARK_CASE if (i + j) % 2 else POSSIBLE_LIGHT_CASE
+                #Coups possible
+                elif [i,j] in self.possibles_moves:
+                    color = POSSIBLE_DARK_CASE if (i + j) % 2 else POSSIBLE_LIGHT_CASE
 
-                    #Echec
-                    elif [i,j] == self.controller.get_chess():
-                        color = 'red'
+                #Echec
+                elif [i,j] == self.controller.get_chess():
+                    color = 'red'
 
-                    #Cas normal
-                    else:
-                        color =  DARK_CASE if (i + j) % 2 else LIGHT_CASE
+                #Cas normal
+                else:
+                    color =  DARK_CASE if (i + j) % 2 else LIGHT_CASE
 
-                    self.window[(i,j)].Update(button_color=('white', color),
-                            image_filename=piece_image, )
+                self.window[(i,j)].Update(button_color=('white', color),
+                        image_filename=piece_image, )
 
-            line_str = "white" if Colors.WHITE == self.controller.line else "black"
-            self.window["subtitle"].Update(
-                f"Line : {line_str}"
-            )
-        else:
+        line_str = "white" if Colors.WHITE == self.controller.line else "black"
+        self.window["subtitle"].Update(
+            f"Line : {line_str}"
+        )
+        if winner is not None:
             if winner is not None:
                 if winner == Colors.WHITE:
                     winner_str = "white"
