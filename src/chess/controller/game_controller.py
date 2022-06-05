@@ -40,7 +40,7 @@ class Game():
         - Vérifie que la piece qui bouge correspond au trait
         - Appelle Board:Move, qui vérifiera toutes les conditions liées à la disposition du plateau
         """
-        if self.winner != None:
+        if self.winner is not None:
             raise ValueError("La partie est finie")
 
         Board.coord_valid(move_to)
@@ -126,6 +126,5 @@ class Game():
 
     def move_list(self):
         """Renvoie la liste des mouvements pour la vue
-        TODO
         """
         return ""

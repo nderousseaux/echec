@@ -2,8 +2,6 @@
 
 from copy import deepcopy
 
-
-from chess.model import board
 from chess.model.colors_enum import Colors
 from chess.model.pieces.piece import Piece
 from chess.model.pieces.rook import Rook
@@ -22,19 +20,8 @@ class King(Piece):
         """
         deplacements = []
 
-        position = self.board.get_position(self)
-
         moves = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]]
-        for move in moves:
-            try:
-                deplacement = [position[0]+move[0], position[1]+move[1]]
-                #Si on sort du plateau, on arrête
-                board.Board.coord_valid(deplacement)
-
-                deplacements.append(deplacement)
-
-            except ValueError:
-                continue
+        deplacements+=self.deplacements_list(moves)
 
         #Roque
         if enable_rook:

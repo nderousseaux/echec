@@ -37,19 +37,19 @@ LIGHT_CASE = "#B58863"
 POSSIBLE_DARK_CASE = '#B8B1A7'
 POSSIBLE_LIGHT_CASE = '#99806B'
 
+def get_image(piece):
+    """Renvoie l'image correspondant a la piece en paramètre
+    """
+    if piece is None:
+        return images["blank"]
+
+    return images[
+        type(piece).__name__.lower() + ("W" if piece.color == Colors.WHITE else "B")
+    ]
+
 class GraphicalView():
     """Classe graphique du projet echec
     """
-
-    def get_image(self, piece):
-        """Renvoie l'image correspondant a la piece en paramètre
-        """
-        if piece is None:
-            return images["blank"]
-
-        return images[
-            type(piece).__name__.lower() + ("W" if piece.color == Colors.WHITE else "B")
-        ]
 
     def new_game(self):
         """Démarre une nouvelle partie
@@ -128,7 +128,7 @@ class GraphicalView():
 
         for i in range(8):
             for j in range(8):
-                piece_image = self.get_image(self.controller.get_piece([i, j]))
+                piece_image = get_image(self.controller.get_piece([i, j]))
                 #Ma pièce
                 if (i,j) == self.move_from:
                     color = 'green'
@@ -212,7 +212,7 @@ class GraphicalView():
         for i in range(8):
             row = [sg.T(str(8-i)+'    ', font='Any 13')]
             for j in range(8):
-                image = self.get_image(self.controller.get_piece([j,7-i]))
+                image = get_image(self.controller.get_piece([j,7-i]))
                 color = DARK_CASE if (7-i + j) % 2 else LIGHT_CASE
                 case = sg.RButton(
                     '',

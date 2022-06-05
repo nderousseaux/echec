@@ -15,9 +15,8 @@ class Bishop(Piece):
         """
 
         deplacements = []
-        deplacements+=self.deplacements_one_direction(1,1)
-        deplacements+=self.deplacements_one_direction(-1,-1)
-        deplacements+=self.deplacements_one_direction(1,-1)
-        deplacements+=self.deplacements_one_direction(-1,1)
+        for i in [-1,1]:
+            for j in [-1,1]:
+                deplacements+=self.deplacements_one_direction(i,j)
 
         return deplacements

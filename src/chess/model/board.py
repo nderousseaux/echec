@@ -17,63 +17,64 @@ class Board():
         """
         if (
             not isinstance(pos, list) or
-            len(pos) != 2 or
+            len(pos) != 2
+        ):
+            raise ValueError("La position doit être une liste de deux éléments")
+
+        if (
             pos[0] < 0 or
             pos[0] > 7 or
             pos[1] < 0 or
             pos[1] > 7
         ):
-            raise ValueError("La position n'est pas valide")
+            raise ValueError("La position doit être dans les limites du plateau")
 
-    def __init__(self, pieces=None):
+    def __init__(self):
         """Initialise le plateau
         Place les piece au bon endroit au début
         """
 
-        if pieces is None:
-            # self.pieces = {
-            #     Rook(Colors.WHITE, self): [0,0],
-            #     Knight(Colors.WHITE, self): [1,0],
-            #     Bishop(Colors.WHITE, self): [2,0],
-            #     Queen(Colors.WHITE, self): [3,0],
-            #     King(Colors.WHITE, self): [4,0],
-            #     Bishop(Colors.WHITE, self): [5,0],
-            #     Knight(Colors.WHITE, self): [6,0],
-            #     Rook(Colors.WHITE, self): [7,0],
-            #     Pawn(Colors.WHITE, self): [0,1],
-            #     Pawn(Colors.WHITE, self): [1,1],
-            #     Pawn(Colors.WHITE, self): [2,1],
-            #     Pawn(Colors.WHITE, self): [3,1],
-            #     Pawn(Colors.WHITE, self): [4,1],
-            #     Pawn(Colors.WHITE, self): [5,1],
-            #     Pawn(Colors.WHITE, self): [6,1],
-            #     Pawn(Colors.WHITE, self): [7,1],
+        self.pieces = {
+            Rook(Colors.WHITE, self): [0,0],
+            Knight(Colors.WHITE, self): [1,0],
+            Bishop(Colors.WHITE, self): [2,0],
+            Queen(Colors.WHITE, self): [3,0],
+            King(Colors.WHITE, self): [4,0],
+            Bishop(Colors.WHITE, self): [5,0],
+            Knight(Colors.WHITE, self): [6,0],
+            Rook(Colors.WHITE, self): [7,0],
+            Pawn(Colors.WHITE, self): [0,1],
+            Pawn(Colors.WHITE, self): [1,1],
+            Pawn(Colors.WHITE, self): [2,1],
+            Pawn(Colors.WHITE, self): [3,1],
+            Pawn(Colors.WHITE, self): [4,1],
+            Pawn(Colors.WHITE, self): [5,1],
+            Pawn(Colors.WHITE, self): [6,1],
+            Pawn(Colors.WHITE, self): [7,1],
 
-            #     Rook(Colors.BLACK, self): [0,7],
-            #     Knight(Colors.BLACK, self): [1,7],
-            #     Bishop(Colors.BLACK, self): [2,7],
-            #     Queen(Colors.BLACK, self): [3,7],
-            #     King(Colors.BLACK, self): [4,7],
-            #     Bishop(Colors.BLACK, self): [5,7],
-            #     Knight(Colors.BLACK, self): [6,7],
-            #     Rook(Colors.BLACK, self): [7,7],
-            #     Pawn(Colors.BLACK, self): [0,6],
-            #     Pawn(Colors.BLACK, self): [1,6],
-            #     Pawn(Colors.BLACK, self): [2,6],
-            #     Pawn(Colors.BLACK, self): [3,6],
-            #     Pawn(Colors.BLACK, self): [4,6],
-            #     Pawn(Colors.BLACK, self): [5,6],
-            #     Pawn(Colors.BLACK, self): [6,6],
-            #     Pawn(Colors.BLACK, self): [7,6]
-            # }
-            self.pieces = {                
-                King(Colors.WHITE, self): [0,0],
-                Queen(Colors.WHITE, self): [0,6],
-                Queen(Colors.WHITE, self): [1,0],
-                King(Colors.BLACK, self): [7,7],
-            }
-        else:
-            self.pieces = pieces
+            Rook(Colors.BLACK, self): [0,7],
+            Knight(Colors.BLACK, self): [1,7],
+            Bishop(Colors.BLACK, self): [2,7],
+            Queen(Colors.BLACK, self): [3,7],
+            King(Colors.BLACK, self): [4,7],
+            Bishop(Colors.BLACK, self): [5,7],
+            Knight(Colors.BLACK, self): [6,7],
+            Rook(Colors.BLACK, self): [7,7],
+            Pawn(Colors.BLACK, self): [0,6],
+            Pawn(Colors.BLACK, self): [1,6],
+            Pawn(Colors.BLACK, self): [2,6],
+            Pawn(Colors.BLACK, self): [3,6],
+            Pawn(Colors.BLACK, self): [4,6],
+            Pawn(Colors.BLACK, self): [5,6],
+            Pawn(Colors.BLACK, self): [6,6],
+            Pawn(Colors.BLACK, self): [7,6]
+        }
+        # self.pieces = {
+        #     King(Colors.WHITE, self): [0,0],
+        #     Queen(Colors.WHITE, self): [0,6],
+        #     Queen(Colors.WHITE, self): [1,0],
+        #     King(Colors.BLACK, self): [7,7],
+        # }
 
     def get_position(self,piece):
         """Renvoie la position d'une piece
@@ -100,9 +101,11 @@ class Board():
     def get_king(self, color):
         """Renvoie le roi de la couleur en paramètre
         """
-        for key in self.pieces:
-            if isinstance(key, King) and key.color == color:
-                return key
+        for piece in self.get_pieces_color(color):
+            if isinstance(piece, King):
+                return piece
+
+        raise ValueError("Il n'y a pas de roi de cette couleur")
 
     def get_deplacements(self, pos):
         """Renvoie la liste des déplacements possibles pour la piece sur la case en paramètre
@@ -170,11 +173,11 @@ class Board():
 
         #Si c'est un roque
         if isinstance(piece, King) and not piece.has_move and move_from[0] in [2,6]:
-            #Roque de gauche
+            #Tour de gauche
             if move_from[0] == 2:
                 rook = self.get_piece([0,position[1]])
                 self.pieces[rook] = [3,position[1]]
-            #Roque de gauche
+            #Tour de gauche
             elif move_from[0] == 6:
                 rook = self.get_piece([7,position[1]])
                 self.pieces[rook] = [5,position[1]]

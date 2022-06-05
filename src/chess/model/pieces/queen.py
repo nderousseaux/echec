@@ -15,14 +15,12 @@ class Queen(Piece):
         """
 
         deplacements = []
-        deplacements+=self.deplacements_one_direction(1,0)
-        deplacements+=self.deplacements_one_direction(-1,0)
-        deplacements+=self.deplacements_one_direction(0,1)
-        deplacements+=self.deplacements_one_direction(0,-1)
-        deplacements+=self.deplacements_one_direction(1,1)
-        deplacements+=self.deplacements_one_direction(-1,-1)
-        deplacements+=self.deplacements_one_direction(1,-1)
-        deplacements+=self.deplacements_one_direction(-1,1)
 
+        for i in [-1,0,1]:
+            for j in [-1,0,1]:
+                if i == 0 and j == 0:
+                    continue
+
+                deplacements+=self.deplacements_one_direction(i,j)
 
         return deplacements
