@@ -3,7 +3,7 @@
 from enum import Enum
 
 class Colors(Enum):
-    """Énumération des couleurs
+    """ Énumération des couleurs
     Le WHITE_AND_BLACK est utile en cas d'égalité
     """
     WHITE = 0

@@ -3,5 +3,6 @@
     "python.linting.enabled": true,
     "files.exclude": {
         "**/__pycache__": true
-    }
+    },
+    "todo-tree.tree.scanMode":"workspace only"
 }
